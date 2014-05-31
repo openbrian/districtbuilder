@@ -14,9 +14,9 @@ US Census data is available down to the level of the "census block" – in citie
 requirements
 ------------
 
-#Using the VM, which automatically installs everything except Processing:
-#- VirtualBox (<https://www.virtualbox.org/>)
-#- Vagrant (<http://www.vagrantup.com/>)
+> Using the VM, which automatically installs everything except Processing:
+> - VirtualBox (<https://www.virtualbox.org/>)
+> - Vagrant (<http://www.vagrantup.com/>)
 
 For the manual method:
 - PostgreSQL
@@ -43,22 +43,22 @@ Clone this repo in the directory of your choice:
     git clone git://github.com/meetar/dotmap.git
 A directory called "dotmap" will be created.
 
-#**For the VM way:**  
-#Go to the dotmap directory and start the VM:
-#
-#    cd dotmap
-#    vagrant up
-#...that takes a few minutes on my machine. Then:
-#
-#Connect to the VM with ssh, either with an app like PuTTY or through the command line:
-#
-#    ssh vagrant@127.0.0.1 -p 2222
-#    password: vagrant
-#    
-#Then change to the shared directory in the VM, which is the same as your local project directory:
-#
-#    cd /vagrant
-#There you should see the files from this repo.
+> **For the VM way:**  
+> Go to the dotmap directory and start the VM:
+> 
+>     cd dotmap
+>     vagrant up
+> ...that takes a few minutes on my machine. Then:
+> 
+> Connect to the VM with ssh, either with an app like PuTTY or through the command line:
+> 
+>     ssh vagrant@127.0.0.1 -p 2222
+>     password: vagrant
+>     
+> Then change to the shared directory in the VM, which is the same as your local project directory:
+> 
+>     cd /vagrant
+> There you should see the files from this repo.
 
 **For the manual method:**  
 
@@ -82,7 +82,7 @@ This will ask your permission to do a few things, in sequence:
 
 Lastly, /index.html will display the tiles using Google JavaScript mapping API! You can watch the tiles fill in as they finish rendering if you zoom in and out.
 
-#When you're done with your virtual machine, be sure to turn it off by running `vagrant destroy`, the same way #you ran `vagrant up`.
+> When you're done with your virtual machine, be sure to turn it off by running `vagrant destroy`, the same way you ran `vagrant up`.
 
 <http://twitter.com/openbrian>
 <brian@derocher.org>
