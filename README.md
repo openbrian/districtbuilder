@@ -32,10 +32,10 @@ setup
 
 Install the applications required above, depending on your method of choice.
 
- $ createdb citizens
- $ psql citizens;
+    $ createdb citizens
+    $ psql citizens;
 
- citizens=> create extension postgis;
+    citizens=> create extension postgis;
 
 
 Clone this repo in the directory of your choice:
