@@ -5,7 +5,6 @@ import ogr
 from shapely.geometry import Polygon
 from random import uniform
 import sqlite3
-from globalmaptiles import GlobalMercator
 import zipfile
 from time import time
 
@@ -91,7 +90,6 @@ def unlock(filename):
 
 def main(input_filename, output_filename):
 	print "Processing: %s - Ctrl-Z to cancel"%input_filename
-	merc = GlobalMercator()
 
 	# open the shapefile
 	ds = ogr.Open( input_filename )
@@ -135,7 +133,7 @@ def main(input_filename, output_filename):
 
 	conn = sqlite3.connect( output_filename )
 	c = conn.cursor()
-	c.execute( "create table if not exists people (x real, y real, quadkey text)" )
+	c.execute( "create table if not exists people (x real, y real)" )
 	
 	n_features = len(lyr)
 
@@ -166,11 +164,9 @@ def main(input_filename, output_filename):
 				if geom.Intersects( samplepoint ):
 					break
 
-			x, y = merc.LatLonToMeters( samplepoint.GetY(), samplepoint.GetX() )
-			tx,ty = merc.MetersToTile( x, y, 21)
-			quadkey = merc.QuadTree( tx, ty, 21 )
-
-			c.execute( "insert into people values (?,?,?)", (x, y, quadkey) )
+			x = samplepoint.GetY()
+			y = samplepoint.GetX()
+			c.execute( "insert into people values (?,?)", (x, y) )
 	
 	conn.commit()
 	print "Finished processing %s"%output_filename
