@@ -1,5 +1,6 @@
+*.db
+git.diff
 *.pyc
 *.swp
-*.db
-.vagrant
 /tmp
+.vagrant
