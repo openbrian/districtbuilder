@@ -1,7 +1,7 @@
 DistrictBuilder
 ======
 
-Combining Brendan Martin-Anderson's US Census Dotmap with a k-means clustering algorithm to generate voting districts for any county, in an effort to eliminate gerrymandering.
+Combining Brendan Martin-Anderson's US Census Dotmap with a k-means clustering algorithm to generate voting districts for any US state, in an effort to eliminate gerrymandering.
 
 the process
 -----------
