@@ -1,7 +1,6 @@
-#!/usr/bin/python
 import os
 import sys
-import ogr
+from osgeo import ogr
 from shapely.geometry import Polygon
 from random import uniform
 import sqlite3
@@ -63,11 +62,11 @@ def confirm(prompt=None, resp=False):
         prompt = '%s [%s]|%s: ' % (prompt, 'n', 'y')
         
     while True:
-        ans = raw_input(prompt)
+        ans = input(prompt)
         if not ans:
             return resp
         if ans not in ['y', 'Y', 'n', 'N']:
-            print ' Please enter y or n'
+            print(' Please enter y or n')
             continue
         if ans == 'y' or ans == 'Y':
             return True
@@ -80,7 +79,7 @@ def unlock(filename):
     PID = commands.getoutput("fuser %s"%filename)
     # get the id of the locking process and kill it
     PID = re.search('\d+$', PID).group(0)
-    print "Killing PID: %s"%PID
+    print("Killing PID: %s"%PID)
     os.environ['DBLOCK'] = PID
     os.system("kill -9 $DBLOCK")
     # sometimes unlocking a file will delete it -
@@ -89,12 +88,12 @@ def unlock(filename):
         os.system("rm %s*"%filename)
 
 def main(input_filename, output_filename):
-    print "Processing: %s - Ctrl-Z to cancel"%input_filename
+    print("Processing: %s - Ctrl-Z to cancel"%input_filename)
 
     # open the shapefile
     ds = ogr.Open( input_filename )
     if ds is None:
-        print "Open failed.\n"
+        print("Open failed.\n")
         sys.exit( 1 )
 
     lyr = ds.GetLayerByIndex( 0 )
@@ -126,10 +125,10 @@ def main(input_filename, output_filename):
             unlock(output_filename)
         # if it's still there, there's a problem, bail
         if os.path.isfile(output_filename):
-            print "Trouble - exiting."
+            print("Trouble - exiting.")
             sys.exit()
         else:
-            print "Success - continuing:"
+            print("Success - continuing:")
 
     conn = sqlite3.connect( output_filename )
     c = conn.cursor()
@@ -141,7 +140,7 @@ def main(input_filename, output_filename):
         if j%1000==0:
             conn.commit()
             if j%10000==0:
-                print " %s/%s (%0.2f%%)"%(j+1,n_features,100*((j+1)/float(n_features)))
+                print(" %s/%s (%0.2f%%)"%(j+1,n_features,100*((j+1)/float(n_features))))
             else:
                 sys.stdout.write(".")
                 sys.stdout.flush()
@@ -169,20 +168,20 @@ def main(input_filename, output_filename):
             c.execute( "insert into people values (?,?)", (x, y) )
     
     conn.commit()
-    print "Finished processing %s"%output_filename
+    print("Finished processing %s"%output_filename)
 
 
 
 if __name__=='__main__':
     
-    print "US CENSUS DOTMAP GENERATOR"
+    print("US CENSUS DOTMAP GENERATOR")
 
     # read "States" preferences file
     states = []
     try:
         statesfile = open("states", "rU") # rU = universal newline interpretation
     except IOError:
-        print "Couldn't open the States file!"
+        print("Couldn't open the States file!")
         sys.exit()
     lines = (line.rstrip() for line in statesfile) # All lines including the blank ones
     lines = (line for line in lines if line) # Non-blank lines
@@ -191,10 +190,10 @@ if __name__=='__main__':
         if not li.startswith("#"):
             states.append(line.rstrip())
     statesfile.close()
-    print "Downloading states: %s:"%states
+    print("Downloading states: %s:"%states)
     starttime=time()
     
-      if confirm("Step 1: Download files, Continue?", True):
+    if confirm("Step 1: Download files, Continue?", True):
         # download all data from ftp://ftp2.census.gov/geo/tiger/TIGER2010BLKPOPHU/
         downloadlist=""
         for state in states:
@@ -204,12 +203,12 @@ if __name__=='__main__':
     for state in states:
         
         zf = zipfile.ZipFile("../data/zips/tabblock2010_%s_pophu.zip"%state)
-        print "\nUnzipping: ../data/zips/tabblock2010_%s_pophu.zip"%state
+        print("\nUnzipping: ../data/zips/tabblock2010_%s_pophu.zip"%state)
 
         # check if files are already extracted
         for each in zf.namelist():
           if not os.path.exists("../tmp/"+each):
-            print each
+            print(each)
             zf.extract(each, "../tmp")
         main( "../tmp/tabblock2010_%s_pophu.shp"%state, "../data/people.%s.db"%state )
 
@@ -222,16 +221,16 @@ if __name__=='__main__':
                 os.system("rm ../data/people.csv")
                 if os.path.isfile("../data/people.csv"):
                     if not confirm("  Could not delete, attempt to unlock?", False):
-                        print "Exiting"
+                        print("Exiting")
                         sys.exit()
                     else:
                         unlock("../data/people.csv")
                     # if it's still there, there's a problem, bail
                     if os.path.isfile("../data/people.csv"):
-                        print "Trouble - exiting."
+                        print("Trouble - exiting.")
                         sys.exit()
                     else:
-                        print "Success - continuing:"
+                        print("Success - continuing:")
                         
                 subprocesses.call("bash", "bashsort.sh")
 
@@ -239,8 +238,8 @@ if __name__=='__main__':
     plural = "" if states == 1 else "s"
     totaltime=(time()-starttime)/60
     
-    print "COMPLETED - Processed %s state%s in %.2f minutes"%(numstates, plural, totaltime)
-    print "Next step, tile generation:"
-    print " - Edit zoomlevels /lib/Processing/dotmap/data/zoomlevel"
-    print " - Run /lib/Processing/dotmap/dotmap.pde in Processing"
-    print " - view tiles in /index.html!"
+    print("COMPLETED - Processed %s state%s in %.2f minutes"%(numstates, plural, totaltime))
+    print("Next step, tile generation:")
+    print(" - Edit zoomlevels /lib/Processing/dotmap/data/zoomlevel")
+    print(" - Run /lib/Processing/dotmap/dotmap.pde in Processing")
+    print(" - view tiles in /index.html!")

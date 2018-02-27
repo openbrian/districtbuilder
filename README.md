@@ -17,10 +17,9 @@ requirements
 - PostgreSQL
 - PostGIS
 - pl/pgsql
-- Python
+- Python 3
 - Sqlite3
 - The Python GDAL bindings (<http://pypi.python.org/pypi/GDAL/>)
-- Other libraries depending on your machine's configuration.
 
 setup
 -----
@@ -39,11 +38,31 @@ Clone this repo in the directory of your choice:
 
 A directory called "districtbuilder" will be created.
 
+virtualenv
+==========
+
+Install virtualenv at the OS level (apt-get, homebrew, etc).
+
+mkdir myproject
+cd myproject
+virtualenv -p /usr/bin/python3 venv
+source venv/bin/activate
+
+dependencies
+============
+
+sudo apt-get update
+sudo apt-get install libgdal-dev
+export CPLUS_INCLUDE_PATH=/usr/include/gdal
+export C_INCLUDE_PATH=/usr/include/gdal
+pip install gdal
+
+See https://gis.stackexchange.com/questions/28966/python-gdal-package-missing-header-file-when-installing-via-pip
 
 instructions
 ------------
 
-A preferences file "bin/states" contains a list of the states and their associated numbers, according to the US Census zipfiles. By default, only Alabama is uncommented - uncomment any others you'd like to include in your map. Uncommenting all the states will cause makedots.py to download and process about 17gb of files and could take many hours.
+A preferences file "bin/states" contains a list of the states and their associated numbers, according to the US Census zipfiles. By default, only Virginia is uncommented - uncomment any others you'd like to include in your map. Uncommenting all the states will cause makedots.py to download and process about 17gb of files and could take many hours.
 
 Then, go to the binaries dir and run makedots.py:
 
